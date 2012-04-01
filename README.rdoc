@@ -1,0 +1,15 @@
+== Airplane simulation in Ruby on Rails 
+
+ This simulation uses Faye/HTML5 websockets with an OpenLayers geomap interface.
+
+ This was developed in Rails 3 on Windows 7. It places several pinpoints as if
+ they where air planes on the map and then moves them around on the map. Ruby Faye/websockets
+ are used to move the planes. A couple of processes on the server make the planes move.
+
+
+== Getting Started
+
+1. 
+2. 
+3. 
+
