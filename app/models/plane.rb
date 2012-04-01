@@ -18,14 +18,54 @@ class Plane < ActiveRecord::Base
     self.save
   end
   
+  # we may need a plane that will start out near the map edge and move towards it
+  def self.setup_test_plane
+    tplane = self.find_by_plane_type('test')
+    if !tplane
+      tplane = self.new(:plane_type => 'test')
+      tplane.save
+    end
+    tplane.latitude = 75
+    tplane.latitude_movement = 0.9
+    tplane.longitude = -30
+    tplane.longitude_movement = 0.1
+    tplane.save 
+  end
+  
+  # flag planes that are near edge of map,
+  # this is just for testing/diagnostic purposes
+  #
+  def rpt_flag
+    flag = ""
+    if self.latitude > 70 or self.latitude < -70
+      flag = "*"
+    end
+    if self.longitude > 170 or self.longitude < -170
+      flag = "*"
+    end
+    flag
+  end
+  
+  # console report facility
+  #
+  def self.console_rpt
+    self.find(:all).each do |plane|
+      puts plane.rpt_flag + 
+      plane.id.to_s + ':' + 
+      plane.latitude.to_s + ',' + plane.longitude.to_s      
+    end
+    ""
+  end
+  
   # fields that need to be sent to Faye clients
   def important_fields
     {:id => self.id, :latitude => self.latitude, :longitude => self.longitude}
   end
   
-  # if lat/lon are not valid because plane moved off the end of the earth
-  # then reset movement parameters so caller can try again until plane 
-  # moves someplace that is valid
+  # if lat/lon are not valid because plane is close to moving 
+  # off the end of the map then reset movement parameters. This is so 
+  # caller can try a move again until plane moves someplace away from that
+  # map edge
   #
   
   def valid_latlon(lat,lon)
@@ -38,7 +78,14 @@ class Plane < ActiveRecord::Base
       valid = false
       self.longitude_movement = rand(2) - rand
     end
-    self.save if !valid
+    self.save if !valid    
+=begin    
+    if !valid
+      puts '------------------ NOT VALID -----------------'
+      p Time.now
+      p self
+    end
+=end    
     valid
   end
 
