@@ -4,8 +4,8 @@ require 'eventmachine'
 require 'faye'
 
 
-# Event Machine server is sent messages that it publishes
-# to the chat room through a Faye service.
+# Event Machine server is sent plane data through JSON that it publishes
+# to make available to the Javascript clients through a Faye service.
 
 class Server < EventMachine::Connection
   attr_accessor :options, :status
@@ -16,14 +16,14 @@ class Server < EventMachine::Connection
     
     p message
     
-    # publish the message to the chat room    
+    # publish the flight info
     client.publish('/messages/public', 'json' => message)                  
     puts "#{@status} -- #{message}"        
   end
 end
 
 # create a service through event machine to read messages through port 2000
-# and send them to the chat room.
+# and send them to Faye.
 
 EventMachine.run do
   EventMachine.start_server 'localhost', 2000, Server do |conn|
