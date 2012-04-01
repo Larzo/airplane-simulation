@@ -1,0 +1,101 @@
+
+ <div id="basicMap"> </div>
+ 
+ 
+ <script>
+  
+   // object to store map data so call faye back
+   // has access.
+   
+   var marker_store;
+
+   function MarkerStore() {  
+     this.list = new Array();           
+   }  
+  
+   // faye callback client.
+   // 
+   // passed data is an array of marker data
+   // and contains new locations to move    
+   MarkerStore.prototype.faye_callback = function(data)  
+   {     	
+     var json_ar = eval('(' + data.json + ')');
+     
+     for(var i in json_ar) {
+       var mark = json_ar[i]; 
+       
+       // get the old plane marker and remove if off the map
+       marker = this.list[mark.id];
+       this.marker_layer.removeMarker(marker);
+       marker.destroy();
+     
+       // get the new location for the plane
+       lat = mark.latitude; 
+         
+       lon = mark.longitude;
+       var lonLat = new OpenLayers.LonLat(lon,lat)          
+         .transform(
+           new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+           this.map.getProjectionObject() // to Spherical Mercator Projection
+         );
+  
+       // add the new plane location to the map
+       marker = new OpenLayers.Marker(lonLat);         
+       this.marker_layer.addMarker(marker);
+       // save the plane marker into list
+       this.list[mark.id] = marker;
+     }
+   }
+
+            
+      
+   function init() {
+   	 marker_store = new MarkerStore();
+   	 map = new OpenLayers.Map("basicMap");
+   	 marker_store.map = map;
+   	 
+   	 // set up faye client and callback
+     var client = new Faye.Client('http://localhost:9292/faye');     
+     
+   	 var public_subscription = client.subscribe('/messages/public', 
+   	   function callbackProxy(data) {
+   	     marker_store.faye_callback(data)  	
+   	   }
+   	 );
+       	
+     // set up map layers
+     
+     var mapnik = new OpenLayers.Layer.OSM();
+     map.addLayer(mapnik);
+     map.setCenter(new OpenLayers.LonLat(-70.144,43.531) // Center of the map
+      .transform(
+        new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+        new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
+      ), 4 // Zoom level
+     );
+     var markers = new OpenLayers.Layer.Markers( "Markers" );
+     marker_store.marker_layer = markers;
+     map.addLayer(markers);         
+     
+     // put planes onto map
+            
+     <% @planes.each do |plane| %>
+       // var lonLat = new OpenLayers.LonLat(-70.144,43.531 )
+       var lonLat = new OpenLayers.LonLat(<%= plane.longitude %>, <%= plane.latitude %>)          
+         .transform(
+           new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+           map.getProjectionObject() // to Spherical Mercator Projection
+         );
+  
+         marker = new OpenLayers.Marker(lonLat);
+         // store planes into object so faye client 
+         // callback has access to them
+         marker_store.list[<%= plane.id %>] = marker;        
+         markers.addMarker(marker);
+          
+     <% end %>
+   
+  }
+ </script>
+ 
+

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	 <title>OpenLayers Demo</title>
+    <style type="text/css">
+      html, body, #basicMap {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+      }
+    </style>
+     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+     <%= javascript_include_tag "http://localhost:9292/faye.js" %>
+	<!-- 
+		<script src="/javascripts/OpenLayers.js"></script> -->
+</head>
+<body onload="init();">
+	 <%= yield %>
+	 
+</body>
+</html>
