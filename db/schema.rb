@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120401025210) do
+ActiveRecord::Schema.define(:version => 20120401130642) do
 
   create_table "planes", :force => true do |t|
     t.float    "longitude"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20120401025210) do
     t.float    "latitude_movement"
     t.float    "longitude_movement"
     t.integer  "speed"
+    t.string   "plane_type"
   end
 
 end
