@@ -9,26 +9,31 @@
 
 == Getting Started
 
-1. $ git clone git@github.com:Larzo/airplane-simulation.git
+* $ git clone git@github.com:Larzo/airplane-simulation.git
 
-2. $ cd airplane-simulation
+* $ cd airplane-simulation
 
-3. Install gems for this rails app:
-   $ bundle install
+* Install gems for this rails app:
+ 
+  $ bundle install
 
-4. Create database:
-   $ rake db:migrate
-
-5. create airplanes in database:
-   $ rake db:seed
-
-6. Start faye service. Open a new window in the same directory and run
-   $ rackup faye.ru -E production -s thin   
+* Create database:
    
-7. Start the rails server, the airplane engine, and the event machine service:
-   $ rake start_processes   
+  $ rake db:migrate
 
-8. open a web brower and go to http://localhost:3000   
+* create airplanes in database:
+   
+  $ rake db:seed
+
+* Start faye service. Open a new window in the same directory and run
+
+  $ rackup faye.ru -E production -s thin   
+   
+* Start the rails server, the airplane engine, and the event machine service:
+   
+  $ rake start_processes   
+
+* open a web brower and go to http://localhost:3000   
 
 
 
