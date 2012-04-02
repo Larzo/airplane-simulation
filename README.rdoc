@@ -42,12 +42,12 @@
  Restarting the event machine engine fixes this, so
  it may be tied to that or something specific to the windows environment.
 
- rake start_processes machine=win 
+ $ rake start_processes machine=win 
  causes the the event machine engine to get restarted
  automatically every few minutes, but I am not sure if that
  fixes it quite yet since it is launched as a child process.  
  
- rake start_processes em=false
+ $ rake start_processes em=false
  causes the rails server and vehicle engine to start, but not
  the event machine service. If you do that, you can the start, kill and restart
  the event machine in a seperate window which does work. The command to do that is:
