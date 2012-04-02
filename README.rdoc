@@ -50,7 +50,9 @@
  $ rake start_processes em=false
  causes the rails server and vehicle engine to start, but not
  the event machine service. If you do that, you can the start, kill and restart
- the event machine in a seperate window which does work. The command to do that is:
+ the event machine in a seperate window which does work. 
+ 
+ The command to run the event machine port service seperately is:
  
  $ ruby lib\update_map_svc.rb 
   
