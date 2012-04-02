@@ -68,36 +68,36 @@ class Plane < ActiveRecord::Base
   # map edge
   #
   
-  def valid_latlon(lat,lon)
-    valid = true
+  def near_map_edge(lat,lon)
+    near_edge = false
     if lat > 80 or lat < -80
-      valid = false
+      near_edge = true
       self.latitude_movement = rand(2) - rand
     end
     if lon > 180 or lon < -180
-      valid = false
+      near_edge = true
       self.longitude_movement = rand(2) - rand
     end
-    self.save if !valid    
+    self.save if near_edge    
 =begin    
-    if !valid
-      puts '------------------ NOT VALID -----------------'
+    if near_edge
+      puts '------------------ NEAR MAP EDGE -----------------'
       p Time.now
       p self
     end
 =end    
-    valid
+    near_edge
   end
 
   # move the plane on the map and  
   # return an instance of the moved plane
   
   def move
-    # calculate a valid movement
+    # calculate a desired movement that won't go off the map
     begin
       new_lon = self.longitude + self.longitude_movement
       new_lat = self.latitude + self.latitude_movement
-    end until valid_latlon(new_lat, new_lon)
+    end until !near_map_edge(new_lat, new_lon)
     
     # move the plane
     self.longitude = new_lon
