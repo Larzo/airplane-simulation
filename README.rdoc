@@ -11,6 +11,10 @@
 
 * $ git clone git@github.com:Larzo/airplane-simulation.git
 
+* if you using windows, install win32 event machine:
+
+  $ gem install eventmachine-win32
+
 * $ cd airplane-simulation
 
 * Install gems for this rails app:
@@ -24,10 +28,6 @@
 * create airplanes in database:
    
   $ rake db:seed
-
-* if you using windows, install win32 event machine:
-
-  $ gem install eventmachine-win32
 
 * Start faye service. Open a new window in the same directory and run
 
