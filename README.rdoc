@@ -25,6 +25,10 @@
    
   $ rake db:seed
 
+* if you using windows, install win32 event machine:
+
+  $ gem install eventmachine-win32
+
 * Start faye service. Open a new window in the same directory and run
 
   $ rackup faye.ru -E production -s thin   
@@ -35,31 +39,6 @@
 
 * open a web brower and go to http://localhost:3000   
 
-== Problems
-
- It appears that after several minutes or so of pulses over all planes, 
- the clients no longer get the faye subscriptions. 
- Restarting the event machine engine fixes this, so
- it may be tied to that or something specific to the windows environment.
-
- $ rake start_processes machine=win 
- causes the the event machine engine to get restarted
- automatically every few minutes, but I am not sure if that
- fixes it quite yet since it is launched as a child process.  
- 
- $ rake start_processes em=false
- causes the rails server and vehicle engine to start, but not
- the event machine service. If you do that, you can the start, kill and restart
- the event machine in a seperate window which does work. 
- 
- The command to run the event machine port service seperately is:
- 
- $ ruby lib\update_map_svc.rb 
-  
- I may try to get this app to run on JRuby and see if that has the same problem or not.
-  
-   
- 
  
  
 
