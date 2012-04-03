@@ -10,12 +10,18 @@ require 'faye'
 class Server < EventMachine::Connection
   attr_accessor :options, :status
 
+  # create a Faye client
+    
+  def self.client
+    @client ||= Faye::Client.new('http://localhost:9292/faye')
+  end
+
   def receive_data(message)
-    # create a Faye client
-    client = Faye::Client.new('http://localhost:9292/faye')
        
     # publish the flight info
-    client.publish('/messages/public', 'json' => message)                  
+    #client.publish('/messages/public', 'json' => message)
+    Server.client.publish('/messages/public', 'json' => message)
+                          
     # puts "#{@status} -- #{message}"        
   end
 end
